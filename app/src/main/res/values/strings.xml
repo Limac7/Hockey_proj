@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Hockey</string>
+    <string name="if_no_bluetooth_is_shown_please_pair_in_settings_first">If no bluetooth is shown please pair in settings first!</string>
+    <string name="choose_paired_devices_from_list">Choose paired devices from list:</string>
+</resources>
