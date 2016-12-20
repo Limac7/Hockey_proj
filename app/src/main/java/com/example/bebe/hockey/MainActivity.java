@@ -25,26 +25,20 @@ public class MainActivity extends AppCompatActivity {
     TextView  txtString, txtStringLength, xgyro, ygyro, zgyro, xaccel, yaccel,zaccel;
     Handler bluetoothIn;
     MyDBHandler myDb;
-    double x_gyro;
-    double y_gyro;
-    double z_gyro ;
-    double x_accel;
-    double y_accel;
-    double z_accel;
-
+    double x_gyro,y_gyro,z_gyro,x_accel,y_accel,z_accel,force,spin,acc;
     final int handlerState = 0;
     private BluetoothAdapter btAdapter = null;
     private BluetoothSocket btSocket = null;
     private StringBuilder recDataString = new StringBuilder();
-
     private ConnectedThread mConnectedThread;
-
-
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private static final double GFORCE = 9.81;
+    private static final double WEIGHT = 0.2;
 
 
 
-    private static String address;  // za MAC adresu
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -59,12 +53,12 @@ public class MainActivity extends AppCompatActivity {
         btnOff = (Button) findViewById(R.id.buttonOff);
         txtString = (TextView) findViewById(R.id.txtString);
         txtStringLength = (TextView) findViewById(R.id.View1);
-        xgyro = (TextView) findViewById(R.id.xgyro);
+       /* xgyro = (TextView) findViewById(R.id.xgyro);
         ygyro = (TextView) findViewById(R.id.ygyro);
         zgyro= (TextView) findViewById(R.id.zgyro);
         xaccel = (TextView) findViewById(R.id.xaccel);
         yaccel = (TextView) findViewById(R.id.yaccel);
-        zaccel = (TextView) findViewById(R.id.zaccel);
+        zaccel = (TextView) findViewById(R.id.zaccel);*/
 
         bluetoothIn = new Handler() {
             public void handleMessage(Message msg) {
@@ -90,8 +84,11 @@ public class MainActivity extends AppCompatActivity {
                             x_accel = Double.parseDouble(readings[3]);
                             y_accel = Double.parseDouble(readings[4]);
                             z_accel = Double.parseDouble(readings[5]);
+                            acc = Math.sqrt((x_accel * x_accel) + (y_accel * y_accel) + (z_accel * z_accel)); //  2g
+                            force =acc*GFORCE*WEIGHT;
+                            spin = Math.sqrt((x_gyro * x_gyro) + (y_gyro * y_gyro) + (z_gyro * z_gyro)); //  250°/s
 
-                            SetPodataka setPodataka = new SetPodataka(x_gyro,y_gyro,z_gyro,x_accel,y_accel,z_accel);
+                            SetPodataka setPodataka = new SetPodataka(x_gyro,y_gyro,z_gyro,x_accel,y_accel,z_accel,force,spin,acc);
                             myDb.addData(setPodataka);
 
 
@@ -152,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        address = intent.getStringExtra(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+        String address = intent.getStringExtra(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
 
         BluetoothDevice device = btAdapter.getRemoteDevice(address);
 
@@ -173,9 +170,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         mConnectedThread = new ConnectedThread(btSocket);
-        mConnectedThread.start();
 
-        //provjera povezanosti
+        mConnectedThread.start();
 
         mConnectedThread.write("a");
     }
@@ -242,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
             try {
                 mmOutStream.write(msgBuffer);
             } catch (IOException e) {
-                Toast.makeText(getBaseContext(), "Greska u povezivanju", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Connection error", Toast.LENGTH_LONG).show();
                 finish();
 
             }

@@ -21,7 +21,7 @@ public class DeviceListActivity extends AppCompatActivity {
     private static final String TAG = "DeviceListActivity";
 
 
-    TextView textView1;
+    TextView tvConnect;
 
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
@@ -42,9 +42,9 @@ public class DeviceListActivity extends AppCompatActivity {
 
         checkBTState();
 
-        textView1 = (TextView) findViewById(R.id.connecting);
-        textView1.setTextSize(50);
-        textView1.setText(" ");
+        tvConnect = (TextView) findViewById(R.id.connecting);
+        tvConnect.setTextSize(50);
+        tvConnect.setText(" ");
 
 
         mPairedDevicesArrayAdapter = new ArrayAdapter<>(this, R.layout.ime);
@@ -72,8 +72,7 @@ public class DeviceListActivity extends AppCompatActivity {
     private OnItemClickListener mDeviceClickListener = new OnItemClickListener() {
         public void onItemClick(AdapterView<?> av, View v, int arg2, long arg3) {
 
-            textView1.setText("Connecting...");
-            // MAC adresa je zadnjih 17 znakova
+            tvConnect.setText("Connecting...");
             String info = ((TextView) v).getText().toString();
             String address = info.substring(info.length() - 17);
 
