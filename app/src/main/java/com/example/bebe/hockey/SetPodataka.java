@@ -14,7 +14,7 @@ public class SetPodataka {
     private int id;
     private long timestamp;
 
-    public SetPodataka(double x_gyro, double y_gyro, double z_gyro, double x_accel, double y_accel, double z_accel, double force, double spin, double acc) {
+    public SetPodataka(double x_gyro, double y_gyro, double z_gyro, double x_accel, double y_accel, double z_accel, double force, double spin, double acc, int id) {
         this.setX_gyro(x_gyro);
         this.setY_gyro(y_gyro);
         this.setZ_gyro(z_gyro);
@@ -24,6 +24,7 @@ public class SetPodataka {
         this.setForce(force);
         this.setSpin(spin);
         this.setAcc(acc);
+        this.setId(id);
     }
 
     public double getAcc() {

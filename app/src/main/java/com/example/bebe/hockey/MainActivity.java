@@ -1,16 +1,20 @@
 package com.example.bebe.hockey;
 
+import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,8 +25,9 @@ import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnOn, btnOff;
-    TextView  txtString, txtStringLength, xgyro, ygyro, zgyro, xaccel, yaccel,zaccel;
+    Button btnOn, btnOff, btnAllShots, btnBestShot, btnTips;
+    TextView  txtString, txtStringLength, textView3, textView2;
+    ImageView image;
     Handler bluetoothIn;
     MyDBHandler myDb;
     double x_gyro,y_gyro,z_gyro,x_accel,y_accel,z_accel,force,spin,acc;
@@ -34,8 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private static final UUID BTMODULEUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final double GFORCE = 9.81;
     private static final double WEIGHT = 0.2;
-
-
+    public int tempID;
+    final Context context = this;
 
 
 
@@ -48,75 +53,15 @@ public class MainActivity extends AppCompatActivity {
 
         myDb = new MyDBHandler(this,null,null, 1);
 
-
         btnOn = (Button) findViewById(R.id.buttonOn);
         btnOff = (Button) findViewById(R.id.buttonOff);
+        btnAllShots = (Button) findViewById(R.id.buttonAllShots);
+        btnBestShot = (Button) findViewById(R.id.buttonBestShot);
+        btnTips = (Button) findViewById(R.id.buttonTips);
+
         txtString = (TextView) findViewById(R.id.txtString);
         txtStringLength = (TextView) findViewById(R.id.View1);
-       /* xgyro = (TextView) findViewById(R.id.xgyro);
-        ygyro = (TextView) findViewById(R.id.ygyro);
-        zgyro= (TextView) findViewById(R.id.zgyro);
-        xaccel = (TextView) findViewById(R.id.xaccel);
-        yaccel = (TextView) findViewById(R.id.yaccel);
-        zaccel = (TextView) findViewById(R.id.zaccel);*/
 
-        bluetoothIn = new Handler() {
-            public void handleMessage(Message msg) {
-                if (msg.what == handlerState) {
-                    String readMessage = (String) msg.obj;
-                    recDataString.append(readMessage);
-                    int endOfLineIndex = recDataString.indexOf("*");
-                    if (endOfLineIndex > 0) {
-                        String dataInPrint = recDataString.substring(0, endOfLineIndex);
-                        txtString.setText("Primljeni podatci = " + dataInPrint);
-                        int dataLength = dataInPrint.length();
-                        txtStringLength.setText("Duzina Poruke = " + String.valueOf(dataLength));
-
-                        if (recDataString.charAt(0) == '#')
-                        {
-                            String[] readings = recDataString.toString().split("\\+");
-
-                            readings[0] = readings[0].substring(1);
-
-                            x_gyro = Double.parseDouble(readings[0]);
-                            y_gyro = Double.parseDouble(readings[1]);
-                            z_gyro = Double.parseDouble(readings[2]);
-                            x_accel = Double.parseDouble(readings[3]);
-                            y_accel = Double.parseDouble(readings[4]);
-                            z_accel = Double.parseDouble(readings[5]);
-                            acc = Math.sqrt((x_accel * x_accel) + (y_accel * y_accel) + (z_accel * z_accel)); //  2g
-                            force =acc*GFORCE*WEIGHT;
-                            spin = Math.sqrt((x_gyro * x_gyro) + (y_gyro * y_gyro) + (z_gyro * z_gyro)); //  250°/s
-
-                            SetPodataka setPodataka = new SetPodataka(x_gyro,y_gyro,z_gyro,x_accel,y_accel,z_accel,force,spin,acc);
-                            myDb.addData(setPodataka);
-
-
-
-
-                           /* String x_gyro = readings[0];
-                            String y_gyro = readings[1];
-                            String z_gyro= readings[2];
-                            String x_accel = readings[3];
-                            String y_accel = readings[4];
-                            String z_accel = readings[5];
-
-
-                            xgyro.setText(" Ziroskop X = " + x_gyro );
-                            ygyro.setText(" Ziroskop Y  = " + y_gyro );
-                            zgyro.setText(" Ziroskop Z  = " + z_gyro );
-                            xaccel.setText(" Akcelerometar X  = " + x_accel );
-                            yaccel.setText(" Akcelerometar Y = " + y_accel  );
-                            zaccel.setText(" Akcelerometar Z = " + z_accel  );*/
-
-
-
-                        }
-                        recDataString.delete(0, recDataString.length());
-                    }
-                }
-            }
-        };
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();
         checkBTState();
@@ -125,14 +70,68 @@ public class MainActivity extends AppCompatActivity {
         btnOff.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 mConnectedThread.write("0");
-                Toast.makeText(getBaseContext(), "Zaustavljam", Toast.LENGTH_SHORT).show();
+                stopHandler();
+                Toast.makeText(getApplicationContext(), "Zaustavljam", Toast.LENGTH_SHORT).show();
             }
         });
 
         btnOn.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 mConnectedThread.write("1");
-                Toast.makeText(getBaseContext(), "Pokrecem", Toast.LENGTH_SHORT).show();
+                startHandler();
+                tempID++;
+                Toast.makeText(getApplicationContext(), "Pokrecem", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        btnAllShots.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+
+                mConnectedThread.cancel();
+                Intent i = new Intent(MainActivity.this, AllShotsActivity.class);
+                startActivity(i);
+
+
+
+
+
+            }
+        });
+
+
+
+        btnBestShot.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mConnectedThread.cancel();
+
+
+
+                    }
+                });
+
+        btnTips.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                    // custom dialog
+                    final Dialog dialog = new Dialog(context);
+                    dialog.setContentView(R.layout.activity_tips);
+                    dialog.setTitle("Title...");
+
+                    // set the custom dialog components - text, image and button
+                     textView3 = (TextView) dialog.findViewById(R.id.textView3);
+                     textView2 = (TextView) dialog.findViewById(R.id.textView2);
+                     image = (ImageView) dialog.findViewById(R.id.imageView2);
+
+                    dialog.show();
+
+
+
             }
         });
     }
@@ -145,7 +144,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onResume() {
         super.onResume();
-
 
         Intent intent = getIntent();
 
@@ -167,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                 btSocket.close();
             } catch (IOException e2)
             {
+                Toast.makeText(getBaseContext(),"Closing socket,error occured.",Toast.LENGTH_LONG).show();
             }
         }
         mConnectedThread = new ConnectedThread(btSocket);
@@ -195,8 +194,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (btAdapter.isEnabled()) {
             } else {
-                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-                startActivityForResult(enableBtIntent, 1);
+                Intent turnOn = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                startActivityForResult(turnOn, 1);
             }
         }
     }
@@ -205,6 +204,7 @@ public class MainActivity extends AppCompatActivity {
         private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
+
          ConnectedThread(BluetoothSocket socket) {
             InputStream tmpIn = null;
             OutputStream tmpOut = null;
@@ -212,7 +212,9 @@ public class MainActivity extends AppCompatActivity {
             try {
                 tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
-            } catch (IOException e) { }
+            } catch (IOException e) {
+                Toast.makeText(MainActivity.this, "Problem getting Input and Output streams", Toast.LENGTH_SHORT).show();
+            }
 
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
@@ -229,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
                     String readMessage = new String(buffer, 0, bytes);
                     bluetoothIn.obtainMessage(handlerState, bytes, -1, readMessage).sendToTarget();
                 } catch (IOException e) {
+                    Toast.makeText(MainActivity.this, "Problem receiving data", Toast.LENGTH_SHORT).show();
                     break;
                 }
             }
@@ -238,10 +241,72 @@ public class MainActivity extends AppCompatActivity {
             try {
                 mmOutStream.write(msgBuffer);
             } catch (IOException e) {
-                Toast.makeText(getBaseContext(), "Connection error", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Message transmission failed.", Toast.LENGTH_LONG).show();
                 finish();
 
             }
         }
+        public void cancel(){
+            try {
+                btSocket.close();
+            }
+                    catch (IOException e)
+            {
+                Toast.makeText(MainActivity.this, "Problem with closing socket", Toast.LENGTH_SHORT).show();
+
+            }
+        }
     }
+    private void startHandler() {
+
+        bluetoothIn = new Handler() {
+            public void handleMessage(Message msg) {
+                if (msg.what == handlerState) {
+                    String readMessage = (String) msg.obj;
+                    recDataString.append(readMessage);
+                    int endOfLineIndex = recDataString.indexOf("*");
+                    if (endOfLineIndex > 0) {
+                        String dataInPrint = recDataString.substring(0, endOfLineIndex);
+                        txtString.setText("Primljeni podatci = " + dataInPrint);
+                        int dataLength = dataInPrint.length();
+                        txtStringLength.setText("Duzina Poruke = " + String.valueOf(dataLength));
+
+                        if (recDataString.charAt(0) == '#')
+                        {
+                            String[] readings = recDataString.toString().split("\\+");
+
+                            readings[0] = readings[0].substring(1);
+
+                            x_gyro = Double.parseDouble(readings[0]);
+                            y_gyro = Double.parseDouble(readings[1]);
+                            z_gyro = Double.parseDouble(readings[2]);
+                            x_accel = Double.parseDouble(readings[3]);
+                            y_accel = Double.parseDouble(readings[4]);
+                            z_accel = Double.parseDouble(readings[5]);
+                            acc = Math.sqrt((x_accel * x_accel) + (y_accel * y_accel) + (z_accel * z_accel)); //  2g
+                            force =acc*GFORCE*WEIGHT;
+                            spin = Math.sqrt((x_gyro * x_gyro) + (y_gyro * y_gyro) + (z_gyro * z_gyro)); //  250°/s
+                            if ((acc>2) || (acc<-2)) {
+                                SetPodataka setPodataka = new SetPodataka(x_gyro, y_gyro, z_gyro, x_accel, y_accel, z_accel, force, spin, acc, tempID);
+                                boolean isAdded = myDb.addData(setPodataka);
+                                if (isAdded == true)
+                                {
+                                    Toast.makeText(MainActivity.this,"Data is added",Toast.LENGTH_LONG).show();
+                                }
+                                else
+                                {
+                                    Toast.makeText(MainActivity.this,"Data is not added",Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        }
+                        recDataString.delete(0, recDataString.length());
+                    }
+                }
+            }
+        };
+    }
+    public void stopHandler() {
+        bluetoothIn.removeMessages(0);
+    }
+
 }

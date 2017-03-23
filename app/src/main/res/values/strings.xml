@@ -2,4 +2,27 @@
     <string name="app_name">Hockey</string>
     <string name="if_no_bluetooth_is_shown_please_pair_in_settings_first">If no bluetooth is shown please pair in settings first!</string>
     <string name="choose_paired_devices_from_list">Choose paired devices from list:</string>
+    <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="wrist_shot">"Wrist shot je tip udarca za čije izvođenje igrači najviše koriste zglob i rame.To je vjerojatno najefikasniji udarac u hokeju jer je najprecizniji i može se izvesti veoma brzo uz minimalnu pripremuza razliku od slap shot-a što stvara element iznenađenja.
+        \nKod wrist shot-a pomiče se donja ruka ispod polovine drške palice kako bi se dodala snagu u udarac.Tijelo treba biti pod kutom od 45 stupnjeva u odnosu na gol. Pak se dovodi iza ili u ravninu s stražnjom nogom spuštajući pritom ramena dok pak dolazi u tu poziciju.
+        Pozicija paka je cijelo vrijeme na sredini donjeg dijela palice koji je nagnut na pak. U ovoj poziciji težina tijela treba biti na stražnjoj nozi.
+        \n Na slici je prikaz pravilnog udarca iz zgloba."</string>
+    <string name="slap_shot_logo">\nSlap Shot</string>
+    <string name="slap_shot">Slap shot je najsnažniji udarac u hokeju. Igrač podiže palicu u ravnini ramena ili više te zamahom udara u led nekoliko centimetara iza hokej paka koristeći pritom svoju težinu kako bi savio palicu i „napunio“ ju energijom kao oprugu. Kada palica dotakne pak, igrač rotira zglobove i prebacuje težinu kako bi se sakupljena energija otpustila kroz hokej pak. Na kraju, kao i kod udarca iz zgloba pak se „isprati“ prema cilju. Ovi udarci stvaraju veliku količinu sile , ali su teški za kontrolirati pa se njima gubi preciznost.</string>
+    <string name="all_shots_list">All Shots List</string>
+    <string name="best_shot">Best Shot</string>
+    <string name="kreni">Kreni</string>
+    <string name="stani">Stani</string>
+    <string name="tips">Tips</string>
+    <string name="headline">!!!~BEST SHOT~!!!</string>
+    <string name="force">Sila Udarca:</string>
+    <string name="force_value"></string>
+    <string name="speed">Brzina Udarca:</string>
+    <string name="speed_value"></string>
+    <string name="distance">Prijedeni put:</string>
+    <string name="distance_value"></string>
+    <string name="spin">Broj Okretaja/min:</string>
+    <string name="spin_value"></string>
+    <string name="headline2">Choose Shot From The List</string>
 </resources>

@@ -5,9 +5,15 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@drawable/image"
-    android:alpha = "0.9">
+    android:paddingTop="@dimen/activity_vertical_margin">
+
+    <Button
+        android:id="@+id/buttonOff"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/buttonOn"
+        android:layout_alignParentRight="true"
+        android:text="@string/stani" />
 
     <TextView
         android:id="@+id/View1"
@@ -16,7 +22,8 @@
         android:layout_above="@+id/txtString"
         android:text=""
         android:textSize="15sp"
-        android:textColor="#d3d3d3"/>
+        android:textColor="#d3d3d3"
+        android:layout_below="@+id/buttonTips"/>
 
     <TextView
         android:id="@+id/txtString"
@@ -28,79 +35,48 @@
         android:textSize="15sp"
         android:textColor="#d3d3d3"/>
 
+
+
+
+    <Button
+        android:text="@string/tips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonTips"
+        android:layout_above="@+id/txtString"
+        android:layout_alignLeft="@+id/buttonAllShots"
+        android:layout_alignStart="@+id/buttonAllShots" />
+
+    <Button
+        android:text="@string/best_shot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonBestShot"
+        android:layout_above="@+id/buttonTips"
+        android:layout_alignLeft="@+id/buttonAllShots"
+        android:layout_alignStart="@+id/buttonAllShots"
+        android:layout_marginBottom="12dp" />
+
+
+
+    <Button
+        android:text="@string/all_shots_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonAllShots"
+        android:layout_marginBottom="11dp"
+        android:layout_above="@+id/buttonBestShot"
+        android:layout_centerHorizontal="true" />
+
     <Button
         android:id="@+id/buttonOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:text="@string/kreni"
+        android:layout_marginRight="65dp"
+        android:layout_marginEnd="65dp"
         android:layout_alignParentTop="true"
-        android:text="Kreni" />
-
-    <Button
-        android:id="@+id/buttonOff"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonOn"
-        android:layout_alignParentRight="true"
-        android:text="Stani" />
-
-    <TextView
-        android:id="@+id/ygyro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/xgyro"
-        android:layout_centerHorizontal="true"
-        android:text="Ziroskop Y = ????"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d3d3d3"/>
-
-    <TextView
-        android:id="@+id/zgyro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ygyro"
-        android:layout_centerHorizontal="true"
-        android:text="Ziroskop Z = ????"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d3d3d3"/>
-
-    <TextView
-        android:id="@+id/xaccel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/zgyro"
-        android:layout_centerHorizontal="true"
-        android:text="Akcelerometar X  = ????"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d3d3d3"/>
-    <TextView
-        android:id="@+id/yaccel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/xaccel"
-        android:layout_centerHorizontal="true"
-        android:text="Akcelerometar Y = ????"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d3d3d3"/>
-    <TextView
-        android:id="@+id/zaccel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/yaccel"
-        android:layout_centerHorizontal="true"
-        android:text="Akcelerometar Z = ????"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d3d3d3"/>
-
-
-    <TextView
-        android:id="@+id/xgyro"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="196dp"
-        android:text="Ziroskop X = ????"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="#d3d3d3"/>
+        android:layout_toLeftOf="@+id/buttonOff"
+        android:layout_toStartOf="@+id/buttonOff" />
 
 </RelativeLayout>

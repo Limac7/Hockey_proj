@@ -3,7 +3,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bluetooth"
     android:alpha="0.5"
     >
     <TextView android:id="@+id/name_paired_devices"

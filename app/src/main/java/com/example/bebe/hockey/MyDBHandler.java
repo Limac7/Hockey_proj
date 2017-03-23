@@ -30,7 +30,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String query = "CREATE TABLE " + TABLE_NAME + "(" +
-                COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
+                COLUMN_ID + " INTEGER," +
                 COLUMN_XGYRO + " REAL," +
                 COLUMN_YGYRO + " REAL," +
                 COLUMN_ZGYRO + " REAL," +
@@ -53,9 +53,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
     }
 
 
-    public void addData (SetPodataka setPodataka)
+    public boolean  addData (SetPodataka setPodataka)
     {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(COLUMN_ID, setPodataka.getId());
         values.put(COLUMN_XGYRO, setPodataka.getX_gyro());
         values.put(COLUMN_YGYRO, setPodataka.getY_gyro());
         values.put(COLUMN_ZGYRO, setPodataka.getZ_gyro());
@@ -65,9 +67,14 @@ public class MyDBHandler extends SQLiteOpenHelper {
         values.put(COLUMN_FORCE, setPodataka.getForce());
         values.put(COLUMN_SPIN, setPodataka.getSpin());
         values.put(COLUMN_ACC, setPodataka.getAcc());
-        SQLiteDatabase db = getWritableDatabase();
-        db.insert(TABLE_NAME,null,values);
+        long result = db.insert(TABLE_NAME,null,values);
         db.close();
+        if (result == -1) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
     public Cursor maxForce(SQLiteDatabase db) {
@@ -79,6 +86,25 @@ public class MyDBHandler extends SQLiteOpenHelper {
         return cursor;
 
     }
+    public Cursor maxAcc(SQLiteDatabase db) {
+
+        String query = "SELECT MAX(acc) FROM mjerenja";
+
+        Cursor cursor = db.rawQuery(query,null);
+
+        return cursor;
+
+    }
+    public Cursor maxSpin(SQLiteDatabase db) {
+
+        String query = "SELECT MAX(spin) FROM mjerenja";
+
+        Cursor cursor = db.rawQuery(query,null);
+
+        return cursor;
+
+    }
+
 
 
 

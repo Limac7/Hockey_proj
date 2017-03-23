@@ -26,7 +26,7 @@ public class DeviceListActivity extends AppCompatActivity {
     public static String EXTRA_DEVICE_ADDRESS = "device_address";
 
 
-    private BluetoothAdapter mBtAdapter;
+    private BluetoothAdapter BA;
     private ArrayAdapter<String> mPairedDevicesArrayAdapter;
 
     @Override
@@ -55,9 +55,9 @@ public class DeviceListActivity extends AppCompatActivity {
 
         pairedListView.setOnItemClickListener(mDeviceClickListener);
 
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+        BA = BluetoothAdapter.getDefaultAdapter();
 
-        Set<BluetoothDevice> pairedDevices = mBtAdapter.getBondedDevices();
+        Set<BluetoothDevice> pairedDevices = BA.getBondedDevices();
 
         if (pairedDevices.size() > 0) {
             findViewById(R.id.name_paired_devices).setVisibility(View.VISIBLE);
@@ -77,19 +77,19 @@ public class DeviceListActivity extends AppCompatActivity {
             String address = info.substring(info.length() - 17);
 
 
-            Intent i = new Intent(DeviceListActivity.this, MainActivity.class);
-            i.putExtra(EXTRA_DEVICE_ADDRESS, address);
-            startActivity(i);
+            Intent myintent = new Intent(DeviceListActivity.this, MainActivity.class);
+            myintent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+            startActivity(myintent);
         }
     };
 
     private void checkBTState() {
 
-        mBtAdapter=BluetoothAdapter.getDefaultAdapter();
-        if(mBtAdapter==null) {
-            Toast.makeText(getBaseContext(), "Uredjaj ne podrzava bluetooth", Toast.LENGTH_SHORT).show();
+        BA =BluetoothAdapter.getDefaultAdapter();
+        if(BA ==null) {
+            Toast.makeText(getApplicationContext(), "Bluetooth not supported! Buy new phone please!", Toast.LENGTH_SHORT).show();
         } else {
-            if (mBtAdapter.isEnabled()) {
+            if (BA.isEnabled()) {
                 Log.d(TAG, "...Bluetooth ON...");
             } else {
 
